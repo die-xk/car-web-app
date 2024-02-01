@@ -1,8 +1,15 @@
 import { CustomFilter, Hero, SearchBar } from "@/components";
 import { fetchCars } from "@/utils";
 import { CarCard } from "@/components";
-export default async function Home() {
-  const allCars = await fetchCars();
+import { fuels, manufacturers, yearsOfProduction } from "@/constants";
+export default async function Home({ searchParams }) {
+  const allCars = await fetchCars({
+    manufacturer: searchParams.manufacturer || "",
+    year: searchParams.year || "",
+    fuel: searchParams.fuel || "",
+    limit: searchParams.limit || "",
+    model: searchParams.model || "",
+  });
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
   return (
     <main className="overflow-hidden">
@@ -16,8 +23,8 @@ export default async function Home() {
           <SearchBar />
 
           <div className="home__filter-container">
-            {/* <CustomFilter title="fuel" />
-            <CustomFilter title="year" /> */}
+            <CustomFilter title="fuel" options={fuels} />
+            <CustomFilter title="year" options={yearsOfProduction} />
           </div>
         </div>
 
